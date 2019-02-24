@@ -74,7 +74,7 @@ TEST(Matrix, Sub) {
   m[1][1] = 4;
 
   auto c = m;
-  auto s = m - c;
+  const auto s = m - c;
 
   ASSERT_EQ(s.Rows(), 2);
   ASSERT_EQ(s.Cols(), 2);
