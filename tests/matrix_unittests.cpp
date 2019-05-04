@@ -60,21 +60,21 @@ TEST(Matrix, AddEmpty) {
 
   Matrix<float> c(3, 3);
 
-  Matrix s = m + c;
+  Matrix<float> s = m + c;
 
   EXPECT_EQ(s.Rows(), 0);
   EXPECT_EQ(s.Cols(), 0);
 }
 
 TEST(Matrix, Sub) {
-  Matrix<int> m{2, 2};
+  Matrix<int> m(2, 2);
   m[0][0] = 1;
   m[0][1] = 2;
   m[1][0] = 3;
   m[1][1] = 4;
 
   auto c = m;
-  const auto s = m - c;
+  auto s = m - c;
 
   ASSERT_EQ(s.Rows(), 2);
   ASSERT_EQ(s.Cols(), 2);
@@ -89,7 +89,7 @@ TEST(Matrix, SubEmpty) {
 
   Matrix<double> c(3, 3);
 
-  const auto s = m - c;
+  auto s = m - c;
 
   EXPECT_EQ(s.Rows(), 0);
   EXPECT_EQ(s.Cols(), 0);
@@ -97,7 +97,6 @@ TEST(Matrix, SubEmpty) {
 
 TEST(Matrix, Mult) {
   Matrix<char> m(3, 2);
-  
   /*
   2 0
   0 2
@@ -105,13 +104,13 @@ TEST(Matrix, Mult) {
   */
   // first colunm
   m[0][0] = 2;
-  m[0][1] = 0;
-  m[0][2] = 1;
+  m[1][0] = 0;
+  m[2][0] = 1;
 
   // second colunm
-  m[1][0] = 0;
+  m[0][1] = 0;
   m[1][1] = 2;
-  m[1][2] = 1;
+  m[2][1] = 1;
 
   Matrix<char> c(2, 2);
   /*
@@ -119,27 +118,26 @@ TEST(Matrix, Mult) {
   1 1
   */
   c[0][0] = 1;
-  c[0][1] = 1;
-  c[1][0] = 0;
+  c[0][1] = 0;
+  c[1][0] = 1;
   c[1][1] = 1;
+  auto s = m * c;
 
-  const auto s = m * c;
-
-  ASSERT_EQ(s.Rows(), 2);
-  ASSERT_EQ(s.Cols(), 3);
+  ASSERT_EQ(s.Rows(), 3);
+  ASSERT_EQ(s.Cols(), 2);
   /*
   2 0
   2 2
   2 1
   */
   EXPECT_EQ(s[0][0], 2);
-  EXPECT_EQ(s[0][1], 2);
-  EXPECT_EQ(s[0][2], 2);
-  EXPECT_EQ(s[1][0], 0);
+  EXPECT_EQ(s[1][0], 2);
+  EXPECT_EQ(s[2][0], 2);
+  EXPECT_EQ(s[0][1], 0);
   EXPECT_EQ(s[1][1], 2);
-  EXPECT_EQ(s[1][2], 1);
+  EXPECT_EQ(s[2][1], 1);
 
-  const auto e = c * m;
+  auto e = c * m;
   ASSERT_EQ(0, e.Rows());
   ASSERT_EQ(0, e.Cols());
 }
@@ -153,12 +151,12 @@ TEST(Matrix, Inverse) {
     }   
   }
 
-  const Matrix<double> I(5, 5);
+  Matrix<double> I(5, 5);
   for (size_t i = 0; i < m.Rows(); ++i) {
     I[i][i] = 1.;
   }
-  
-  const auto i = m.Inverse();
+
+  auto i = m.Inverse();
   EXPECT_EQ(I, i*m);
   EXPECT_EQ(I, m*i);
   EXPECT_EQ(m*i, i*m);
